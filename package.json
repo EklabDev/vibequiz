@@ -1,0 +1,171 @@
+{
+  "name": "vibequiz",
+  "displayName": "VibeQuiz",
+  "description": "Generate a multiple-choice quiz from your git diff and unlock PR creation after a passing score.",
+  "version": "0.1.0",
+  "publisher": "eklabdev",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Other",
+    "SCM Providers"
+  ],
+  "activationEvents": [
+    "onView:vibequiz.scmView",
+    "workspaceContains:.git"
+  ],
+  "main": "./dist/extension.js",
+  "files": [
+    "dist",
+    "media",
+    "readme.md",
+    "LICENSE"
+  ],
+  "extensionDependencies": [
+    "vscode.git"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "vibequiz.createQuiz",
+        "title": "VibeQuiz: Create Quiz",
+        "icon": "$(question)"
+      },
+      {
+        "command": "vibequiz.createPullRequest",
+        "title": "VibeQuiz: Create Pull Request",
+        "icon": "$(git-pull-request)"
+      },
+      {
+        "command": "vibequiz.openSettings",
+        "title": "VibeQuiz: Open Settings"
+      },
+      {
+        "command": "vibequiz.setApiKey",
+        "title": "VibeQuiz: Set API Key"
+      }
+    ],
+    "views": {
+      "scm": [
+        {
+          "type": "webview",
+          "id": "vibequiz.scmView",
+          "name": "VibeQuiz",
+          "when": "gitOpenRepositoryCount > 0"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "vibequiz.createQuiz",
+          "when": "view == vibequiz.scmView",
+          "group": "navigation"
+        },
+        {
+          "command": "vibequiz.openSettings",
+          "when": "view == vibequiz.scmView",
+          "group": "navigation"
+        }
+      ],
+      "scm/title": [
+        {
+          "command": "vibequiz.createQuiz",
+          "when": "scmProvider == git",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "VibeQuiz",
+      "properties": {
+        "vibequiz.llmProvider": {
+          "type": "string",
+          "enum": [
+            "copilot",
+            "openai",
+            "anthropic"
+          ],
+          "default": "copilot",
+          "description": "Language model backend used to generate quizzes. Copilot (Enterprise) is recommended; OpenAI and Anthropic require an API key."
+        },
+        "vibequiz.openaiModel": {
+          "type": "string",
+          "default": "gpt-4o",
+          "description": "OpenAI model ID when vibequiz.llmProvider is openai."
+        },
+        "vibequiz.anthropicModel": {
+          "type": "string",
+          "default": "claude-sonnet-4-20250514",
+          "description": "Anthropic model ID when vibequiz.llmProvider is anthropic."
+        },
+        "vibequiz.difficulty": {
+          "type": "string",
+          "enum": [
+            "easy",
+            "medium",
+            "hard"
+          ],
+          "default": "medium",
+          "description": "Quiz difficulty level."
+        },
+        "vibequiz.questionCount": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 20,
+          "default": 5,
+          "description": "Number of multiple-choice questions to generate."
+        },
+        "vibequiz.passingScore": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "default": 70,
+          "description": "Minimum quiz score (%) required before PR creation is unlocked."
+        },
+        "vibequiz.baseBranch": {
+          "type": "string",
+          "default": "main",
+          "description": "Base branch used for the quiz diff and for creating pull requests."
+        },
+        "vibequiz.prTitleTemplate": {
+          "type": "string",
+          "default": "VibeQuiz: {{score}}% — ready for review",
+          "description": "Pull request title template. Supports {{score}}."
+        },
+        "vibequiz.prBodyTemplate": {
+          "type": "string",
+          "default": "## VibeQuiz Results\n\n**Score:** {{score}}%\n\n## Quiz Questions\n\n{{question}}\n",
+          "markdownDescription": "Pull request body template. Supports `{{score}}` and `{{question}}` (questions without answers)."
+        },
+        "vibequiz.maxDiffChars": {
+          "type": "number",
+          "minimum": 1000,
+          "default": 80000,
+          "description": "Maximum characters of git diff sent to the LLM (truncated with a warning if exceeded)."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "node esbuild.js --production",
+    "watch": "node esbuild.js --watch",
+    "compile": "tsc -p ./ --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "package": "vsce package --no-dependencies"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/vscode": "^1.95.0",
+    "@vscode/vsce": "^3.2.0",
+    "esbuild": "^0.24.0",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  },
+  "dependencies": {
+    "@octokit/rest": "^21.0.2"
+  }
+}
