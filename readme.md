@@ -71,6 +71,7 @@ npm run build    # bundle extension
 npm run watch    # rebuild on change
 npm run compile  # typecheck
 npm test         # unit tests
+npm run publish  # publish current version to the VS Code Marketplace
 ```
 
 ## License
