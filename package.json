@@ -2,7 +2,7 @@
   "name": "vibequiz",
   "displayName": "VibeQuiz",
   "description": "Generate a multiple-choice quiz from your git diff and unlock PR creation after a passing score.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "eklabdev",
   "engines": {
     "vscode": "^1.140.0"
