@@ -5,7 +5,7 @@
   "version": "0.1.0",
   "publisher": "eklabdev",
   "engines": {
-    "vscode": "^1.95.0"
+    "vscode": "^1.140.0"
   },
   "categories": [
     "Other",
@@ -160,14 +160,14 @@
     "install:local": "vsce package --no-dependencies -o vibequiz.vsix && code --install-extension vibequiz.vsix"
   },
   "devDependencies": {
-    "@types/node": "^22.10.0",
-    "@types/vscode": "^1.95.0",
-    "@vscode/vsce": "^3.2.0",
-    "esbuild": "^0.24.0",
+    "@types/node": "^26.6.5",
+    "@types/vscode": "^1.140.0",
+    "@vscode/vsce": "^4.0.0",
+    "esbuild": "^0.28.2",
     "typescript": "^5.7.2",
-    "vitest": "^2.1.8"
+    "vitest": "^5.0.5"
   },
   "dependencies": {
-    "@octokit/rest": "^21.0.2"
+    "@octokit/rest": "^22.0.1"
   }
 }
